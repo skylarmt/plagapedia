@@ -1,0 +1,39 @@
+{% include 'header.html' %}
+    <!-- Page Content -->
+    <div class="container">
+
+        <div class="row">
+            <div class="col-lg-12 text-center">
+                <h1 class="jumbotron">Plagapedia</h1>
+                <p class="lead" id="bartext">Processing...</p>
+                <div class="progress progress-striped active">
+                	<div class="progress-bar" role="progressbar" aria-valuenow="5" aria-valuemin="0" aria-valuemax="100">
+                	</div>
+                </div>
+            </div>
+        </div>
+        <!-- /.row -->
+
+    </div>
+    <!-- /.container -->
+
+    <!-- jQuery Version 1.11.1 -->
+    <script src="/js/jquery.js"></script>
+
+    <!-- Bootstrap Core JavaScript -->
+    <script src="/js/bootstrap.min.js"></script>
+	<script>
+		setInterval(function () {
+			$.get("/status/{{ taskid }}", function (data) {
+				$('#bartext').text(data.status);
+				$('.progress-bar').css('width', data.percent+'%').attr('aria-valuenow', data.percent);
+				if (data.complete == 1) {
+					$('.progress-bar').css('width', '100%').attr('aria-valuenow', 100);
+					setTimeout(function () {document.location.href = "/result/{{ taskid }}";}, 800);
+				}				
+			}, "json");
+		}, 500);
+	</script>
+</body>
+
+</html>
